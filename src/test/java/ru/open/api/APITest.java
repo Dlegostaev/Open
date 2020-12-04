@@ -1,4 +1,4 @@
-package ru.open;
+package ru.open.api;
 
 public class APITest {
 }

@@ -1,4 +1,4 @@
-package ru.open;
+package ru.open.ui;
 
 public class UITest {
 }
