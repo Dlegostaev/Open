@@ -2,6 +2,7 @@ package ru.open.api.util;
 
 
 import com.google.gson.Gson;
+import ru.open.api.models.RequestConfig;
 import ru.open.api.models.UnregisteredUser;
 
 import java.nio.file.Files;
@@ -22,5 +23,11 @@ public class JsonHelper {
         String json = ReadFileAsString(filepath);
         Gson gson = new Gson();
         return gson.fromJson(json, UnregisteredUser.class);
+    }
+
+    public static RequestConfig GetConfigFromJson(String filepath) {
+        String json = ReadFileAsString(filepath);
+        Gson gson = new Gson();
+        return gson.fromJson(json, RequestConfig.class);
     }
 }

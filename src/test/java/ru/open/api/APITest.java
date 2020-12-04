@@ -1,13 +1,17 @@
 package ru.open.api;
 
 import org.apache.http.HttpStatus;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import ru.open.api.models.RequestConfig;
 import ru.open.api.models.UsersPostResponse;
 import ru.open.api.models.UnregisteredUser;
 
 import java.io.File;
 
 import static io.restassured.RestAssured.*;
+import static ru.open.api.util.JsonHelper.GetConfigFromJson;
 import static ru.open.api.util.JsonHelper.GetUserFromJson;
 
 public class APITest {
@@ -15,14 +19,13 @@ public class APITest {
     public void TestMethodGet() {
         System.out.println("APITestGet");
 
-        // TODO get from testData.json to UsersPostRequestBody
-        String url = "https://reqres.in/api/users?page=2";
-        int statusCode = HttpStatus.SC_OK;
+        String configPath = "src/test/java/ru/open/api/data/getData.json";
+        RequestConfig requestConfig = GetConfigFromJson(configPath);
 
-        UsersPostResponse usersPostResponse = get(url)    // 1) получить список пользователей
+        UsersPostResponse usersPostResponse = get(requestConfig.url)    // 1) получить список пользователей
                 .then()
                 .assertThat()
-                .statusCode(statusCode)
+                .statusCode(requestConfig.statusCode)
                 .extract()  // 2) замапить на объект
                 .as(UsersPostResponse.class);
 
@@ -47,27 +50,34 @@ public class APITest {
 //        }
     }
 
-    @Test
-    public void TestMethodPost() {
+    // Ability to run as DDT
+    //TODO add dataprovider: number of users configs = number of test runs
+    @DataProvider(name = "data-provider")
+    public Object[][] dataProviderMethod() {
+        return new Object[][] {
+                { "src/test/java/ru/open/api/data/users/testUser.json" },
+                { "src/test/java/ru/open/api/data/users/testUser2.json" }
+        };
+    }
+
+    @Test(dataProvider = "data-provider")
+    public void TestMethodPost(String userFilePath) {
         System.out.println("APITestPost");
 
-        // TODO get from testData.json to UsersPostRequestBody
-        String url = "https://reqres.in/api/users";
-        String testUserFilePath = "src/test/java/ru/open/api/data/users/testUser.json";
-        String contentType = "application/json";
-        int statusCode = HttpStatus.SC_CREATED;
+        String configPath = "src/test/java/ru/open/api/data/postData.json";
+        RequestConfig requestConfig = GetConfigFromJson(configPath);
 
-        UnregisteredUser userReference = GetUserFromJson(testUserFilePath);
+        UnregisteredUser userReference = GetUserFromJson(userFilePath);
         // 1) подготовить тело запроса
-        File testUser = new File(testUserFilePath);
+        File testUser = new File(userFilePath);
         // 2) отправить запрос с телом
         UnregisteredUser userResult = given()
-                .contentType(contentType)
+                .contentType(requestConfig.contentType)
                 .body(testUser)
                 .when()
-                .post(url)
+                .post(requestConfig.url)
                 .then()
-                .statusCode(statusCode)
+                .statusCode(requestConfig.statusCode)
                 // 3) замапить ответ на объект
                 .extract()
                 .as(UnregisteredUser.class);
