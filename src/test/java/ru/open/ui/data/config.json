@@ -1,3 +1,4 @@
 {
-
+  "browser": "chrome",
+  "startPage": "https://www.google.com/"
 }
