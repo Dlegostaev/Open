@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="OpenTestSuite" verbose="1" >
+    <test name="API" >
+        <classes>
+            <class name="ru.open.api.APITest" />
+        </classes>
+    </test>
+
+    <test name="UI">
+        <classes>
+            <class name="ru.open.ui.UITest"/>
+        </classes>
+    </test>
+</suite>
