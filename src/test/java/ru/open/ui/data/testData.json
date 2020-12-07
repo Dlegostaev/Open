@@ -1,8 +1,7 @@
 {
+  "startPage": "https://www.google.com/",
   "searchString": "Открытие",
   "goalPage": "https://www.open.ru",
-  "currencies": [
-    "USD",
-    "EUR"
-  ]
+  "usdName": "USD",
+  "eurName": "EUR"
 }
