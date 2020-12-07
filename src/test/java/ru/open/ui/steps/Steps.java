@@ -48,12 +48,9 @@ public class Steps {
     }
 
     public static void CheckCurrenciesSellBuyDelta(OpenMainPage openMainPage, String currency) throws TestException {
-        String currencyBuyRate = openMainPage.currenciesForm.GetCurrencyRateBankBuy(currency);
-        String currencySellRate = openMainPage.currenciesForm.GetCurrencyRateBankSell(currency);
+        float currencyBuyRate = openMainPage.currenciesForm.GetCurrencyRateBankBuyAsFloat(currency);
+        float currencySellRate = openMainPage.currenciesForm.GetCurrencyRateBankSellAsFloat(currency);
 
-        float currencyBuy = Float.parseFloat(currencyBuyRate.replace(",", "."));
-        float currencySell = Float.parseFloat(currencySellRate.replace(",", "."));
-
-        assert currencySell > currencyBuy: "Sell rate of" + currency + " less than buy rate of " + currency + " or equal to it";
+        assert currencySellRate > currencyBuyRate: "Sell rate of " + currency + " less than buy rate of " + currency + " or equal to it";
     }
 }
