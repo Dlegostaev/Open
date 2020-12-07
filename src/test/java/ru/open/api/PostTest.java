@@ -4,6 +4,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import ru.open.api.models.RequestConfig;
 import ru.open.api.models.UnregisteredUser;
+import ru.open.util.TestException;
 
 import java.io.File;
 
@@ -14,7 +15,7 @@ import static ru.open.api.util.APIJson.GetUserFromJson;
 public class PostTest {
     @Parameters({"configPath", "userFilePath"})
     @Test
-    public void TestMethodPost(String configPath, String userFilePath) {
+    public void TestMethodPost(String configPath, String userFilePath) throws TestException {
         System.out.println("APITestPost");
 
         //String configPath = "src/test/java/ru/open/api/data/postData.json";

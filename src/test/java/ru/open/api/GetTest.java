@@ -4,12 +4,13 @@ import org.testng.annotations.Test;
 import ru.open.api.models.RequestConfig;
 import ru.open.api.models.UsersPostResponse;
 import ru.open.api.util.APIJson;
+import ru.open.util.TestException;
 
 import static io.restassured.RestAssured.*;
 
 public class GetTest {
     @Test
-    public void TestMethodGet() {
+    public void TestMethodGet() throws TestException {
         System.out.println("APITestGet");
 
         String configPath = "src/test/java/ru/open/api/data/getData.json";

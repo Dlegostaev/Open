@@ -2,6 +2,7 @@ package ru.open.ui.pages.open;
 
 import ru.open.ui.forms.OpenCurrenciesForm;
 import ru.open.ui.pages.google.WebPage;
+import ru.open.util.TestException;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
@@ -18,7 +19,7 @@ public class OpenMainPage implements WebPage {
         return this;
     }
 
-    public OpenMainPage() {
+    public OpenMainPage() throws TestException {
         currenciesForm = new OpenCurrenciesForm();
     }
 }
