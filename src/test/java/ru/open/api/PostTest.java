@@ -35,12 +35,7 @@ public class PostTest {
                 .as(UnregisteredUser.class);
 
         // 4) проверить, что в ответе те же самые значения из запроса
-        assert userResult.name.equals(userReference.name) : "user name doesn't match the reference";
-        assert userResult.job.equals(userReference.job) : "user job doesn't match the reference";
-
-        //TODO remove
-        //assert userResult.id.equals(userReference.id): "user id doesn't match the reference";
-        //assert userResult.id == userReference.id: "user id doesn't match the reference";
-        //assert userResult.createdAt.equals(userReference.createdAt): "createdAt job doesn't match the reference";
+        assert userResult.name.equals(userReference.name) : "User name doesn't match the reference";
+        assert userResult.job.equals(userReference.job) : "User job doesn't match the reference";
     }
 }

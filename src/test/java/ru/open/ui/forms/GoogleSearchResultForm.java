@@ -1,22 +1,8 @@
 package ru.open.ui.forms;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
-import java.util.List;
-
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
-
 public class GoogleSearchResultForm {
-    //String ads = "#tvcap .uEierd";
-/*
-    String noAds = "#search .g";
-    String addressDomain = "#search .g cite";
-    String addressFull = "#search .g .yuRUbf > a";
-    String title = "#search .g a > h3 > span";
-    String description = "#search .g .aCOpRe> span";
-*/
     SelenideElement url;
     SelenideElement title;
     SelenideElement description;

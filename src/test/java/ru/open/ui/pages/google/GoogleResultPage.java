@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import static com.codeborne.selenide.Selenide.elements;
 
 public class GoogleResultPage implements WebPage{
-    String searchLocator = "#search .g";
+    String searchLocator = "#search .g";    // only non-ads results are supported
     String urlLocator = ".yuRUbf > a";
     String titleLocator = "a > h3 > span";
     String descriptionLocator = ".aCOpRe> span";

@@ -1,5 +1,6 @@
 package ru.open.api;
 
+import io.restassured.response.ValidatableResponse;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import ru.open.api.models.RequestConfig;
@@ -7,39 +8,20 @@ import ru.open.api.models.UsersPostResponse;
 import ru.open.api.util.APIJson;
 import ru.open.util.TestException;
 
-import static io.restassured.RestAssured.*;
+import static ru.open.api.steps.Steps.*;
 
 public class GetTest {
     @Parameters("configPath")
     @Test
     public void TestMethodGet(String configPath) throws TestException {
         RequestConfig requestConfig = APIJson.GetConfigFromJson(configPath);
+        // 1) получить список пользователей
+        ValidatableResponse response = GetUsersAsResponse(requestConfig.getUrl(), requestConfig.getStatusCode());
 
-        UsersPostResponse usersPostResponse = get(requestConfig.getUrl())    // 1) получить список пользователей
-                .then()
-                .assertThat()
-                .statusCode(requestConfig.getStatusCode())
-                .extract()  // 2) замапить на объект
-                .as(UsersPostResponse.class);
+        // 2) замапить на объект
+        UsersPostResponse usersPostResponse = MapValidatableResponseToUsersPostResponse(response);
 
         // 3) проверить, что все поля пришли (достаточно на notNull)
-        // TODO if "int" field is empty in response, this field will be set to 0
-        //  (in theory, correct data can also be 0, so this asserts can be wrong)
-        assert usersPostResponse.getPage() != 0: "response page is 0";
-        assert usersPostResponse.getPer_page() != 0: "response page is 0";
-        assert usersPostResponse.getTotal() != 0: "response page is 0";
-        assert usersPostResponse.getTotal_pages() != 0: "response page is 0";
-        assert usersPostResponse.getData() != null: "response data is null";
-
-        //TODO optional asserts (remove?)
-//        assert response.per_page == response.data.length: "response users number doesn't match with per_page nubmer";
-//        for (int i = 0; i < response.data.length; i++) {
-//            RegisteredUser user = response.data[i];
-//            assert user.id != 0: "user " + i + " id is 0";
-//            assert user.email != null: "user " + i + " email is null";
-//            assert user.first_name != null: "user " + i + " first_name is null";
-//            assert user.last_name != null: "user " + i + " last_name is null";
-//            assert user.avatar != null: "user " + i + " avatar is null";
-//        }
+        CheckAllValuesOfUsersPostResponse(usersPostResponse);
     }
 }
