@@ -3,9 +3,9 @@ package ru.open.api;
 import org.testng.annotations.Test;
 import ru.open.api.models.RequestConfig;
 import ru.open.api.models.UsersPostResponse;
+import ru.open.api.util.APIJson;
 
 import static io.restassured.RestAssured.*;
-import static ru.open.api.util.JsonHelper.GetConfigFromJson;
 
 public class GetTest {
     @Test
@@ -13,7 +13,7 @@ public class GetTest {
         System.out.println("APITestGet");
 
         String configPath = "src/test/java/ru/open/api/data/getData.json";
-        RequestConfig requestConfig = GetConfigFromJson(configPath);
+        RequestConfig requestConfig = APIJson.GetConfigFromJson(configPath);
 
         UsersPostResponse usersPostResponse = get(requestConfig.url)    // 1) получить список пользователей
                 .then()

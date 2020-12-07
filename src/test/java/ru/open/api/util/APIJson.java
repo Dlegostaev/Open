@@ -1,24 +1,12 @@
 package ru.open.api.util;
 
-
 import com.google.gson.Gson;
 import ru.open.api.models.RequestConfig;
 import ru.open.api.models.UnregisteredUser;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import static ru.open.util.JsonHelper.ReadFileAsString;
 
-public class JsonHelper {
-    public static String ReadFileAsString(String file)
-    {
-        try {
-            return new String(Files.readAllBytes(Paths.get(file)));
-        } catch (Exception e) {
-            System.out.println("Exception"); //TODO handle exception
-        }
-        return null;    //TODO null?
-    }
-
+public class APIJson {
     public static UnregisteredUser GetUserFromJson(String filepath) {
         String json = ReadFileAsString(filepath);
         Gson gson = new Gson();

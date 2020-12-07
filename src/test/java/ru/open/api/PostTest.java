@@ -8,8 +8,8 @@ import ru.open.api.models.UnregisteredUser;
 import java.io.File;
 
 import static io.restassured.RestAssured.given;
-import static ru.open.api.util.JsonHelper.GetConfigFromJson;
-import static ru.open.api.util.JsonHelper.GetUserFromJson;
+import static ru.open.api.util.APIJson.GetConfigFromJson;
+import static ru.open.api.util.APIJson.GetUserFromJson;
 
 public class PostTest {
     @Parameters({"configPath", "userFilePath"})
