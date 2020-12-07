@@ -1,15 +1,24 @@
 package ru.open.api.models;
 
-public class UsersPostRequestBody {
-    String postBody;
-    String contentType;
-    String url;
-    int statusCode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-    public UsersPostRequestBody(String postBody, String contentType, String url, int statusCode) {
-        this.postBody = postBody;
-        this.contentType = contentType;
-        this.url = url;
-        this.statusCode = statusCode;
-    }
+@AllArgsConstructor
+public class UsersPostRequestBody {
+    @Getter
+    @Setter
+    String postBody;
+
+    @Getter
+    @Setter
+    String contentType;
+
+    @Getter
+    @Setter
+    String url;
+
+    @Getter
+    @Setter
+    int statusCode;
 }

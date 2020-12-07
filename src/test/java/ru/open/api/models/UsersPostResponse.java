@@ -1,18 +1,28 @@
 package ru.open.api.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
 public class UsersPostResponse {
-    public int page;
-    public int per_page;
-    public int total;
-    public int total_pages;
+    @Getter
+    @Setter
+    int page;
 
-    public RegisteredUser[] data;
+    @Getter
+    @Setter
+    int per_page;
 
-    public UsersPostResponse(int page, int per_page, int total, int total_pages, RegisteredUser[] data) {
-        this.page = page;
-        this.per_page = per_page;
-        this.total = total;
-        this.total_pages = total_pages;
-        this.data = data;
-    }
+    @Getter
+    @Setter
+    int total;
+
+    @Getter
+    @Setter
+    int total_pages;
+
+    @Getter
+    @Setter
+    RegisteredUser[] data;
 }

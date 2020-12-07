@@ -1,5 +1,6 @@
 package ru.open.api;
 
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import ru.open.api.models.RequestConfig;
 import ru.open.api.models.UsersPostResponse;
@@ -9,28 +10,26 @@ import ru.open.util.TestException;
 import static io.restassured.RestAssured.*;
 
 public class GetTest {
+    @Parameters("configPath")
     @Test
-    public void TestMethodGet() throws TestException {
-        System.out.println("APITestGet");
-
-        String configPath = "src/test/java/ru/open/api/data/getData.json";
+    public void TestMethodGet(String configPath) throws TestException {
         RequestConfig requestConfig = APIJson.GetConfigFromJson(configPath);
 
-        UsersPostResponse usersPostResponse = get(requestConfig.url)    // 1) получить список пользователей
+        UsersPostResponse usersPostResponse = get(requestConfig.getUrl())    // 1) получить список пользователей
                 .then()
                 .assertThat()
-                .statusCode(requestConfig.statusCode)
+                .statusCode(requestConfig.getStatusCode())
                 .extract()  // 2) замапить на объект
                 .as(UsersPostResponse.class);
 
         // 3) проверить, что все поля пришли (достаточно на notNull)
         // TODO if "int" field is empty in response, this field will be set to 0
         //  (in theory, correct data can also be 0, so this asserts can be wrong)
-        assert usersPostResponse.page != 0: "response page is 0";
-        assert usersPostResponse.per_page != 0: "response page is 0";
-        assert usersPostResponse.total != 0: "response page is 0";
-        assert usersPostResponse.total_pages != 0: "response page is 0";
-        assert usersPostResponse.data != null: "response data is null";
+        assert usersPostResponse.getPage() != 0: "response page is 0";
+        assert usersPostResponse.getPer_page() != 0: "response page is 0";
+        assert usersPostResponse.getTotal() != 0: "response page is 0";
+        assert usersPostResponse.getTotal_pages() != 0: "response page is 0";
+        assert usersPostResponse.getData() != null: "response data is null";
 
         //TODO optional asserts (remove?)
 //        assert response.per_page == response.data.length: "response users number doesn't match with per_page nubmer";

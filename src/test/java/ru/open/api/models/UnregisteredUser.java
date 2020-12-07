@@ -1,47 +1,24 @@
 package ru.open.api.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
 public class UnregisteredUser {
+    @Getter
+    @Setter
     public String name;
+
+    @Getter
+    @Setter
     public String job;
+
+    @Getter
+    @Setter
     public int id;
+
+    @Getter
+    @Setter
     public String createdAt;
-
-    public UnregisteredUser(String name, String job, int id, String createdAt) {
-        this.name = name;
-        this.job = job;
-        this.id = id;
-        this.createdAt = createdAt;
-    }
-
-//    @Override
-//    public String toString() {
-//        String result = "{";
-//        int fieldsCounter = 0;
-//        if (name != null) {
-//            result += "name='" + name + '\'';
-//            fieldsCounter++;
-//        }
-//        if (job != null) {
-//            if (fieldsCounter > 0) {
-//                result += ", ";
-//            }
-//            result += "job='" + job + '\'';
-//            fieldsCounter++;
-//        }
-//        if (id != null) {
-//            if (fieldsCounter > 1) {
-//                result += ", ";
-//            }
-//            result += "id='" + id + '\'';
-//            fieldsCounter++;
-//        }
-//        if (createdAt != null) {
-//            if (fieldsCounter > 2) {
-//                result += ", ";
-//            }
-//            result += "createdAt='" + createdAt + '\'';
-//        }
-//        result += "}";
-//        return result;
-//    }
 }
