@@ -1,3 +1,4 @@
 {
-  "browserName": "chrome"
+  "browserName": "chrome",
+  "timeout": 8000
 }
