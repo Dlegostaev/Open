@@ -2,9 +2,13 @@ package ru.open.api.steps;
 
 import io.restassured.response.ValidatableResponse;
 import ru.open.api.models.RegisteredUser;
+import ru.open.api.models.UnregisteredUser;
 import ru.open.api.models.UsersPostResponse;
 
+import java.io.File;
+
 import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
 
 public class Steps {
     public static ValidatableResponse GetUsersAsResponse(String url, int statusCode) {
@@ -36,5 +40,28 @@ public class Steps {
             assert user.getLast_name() != null : "User " + i + " last_name is null";
             assert user.getAvatar() != null : "User " + i + " avatar is null";
         }
+    }
+
+    public static File PrepareRequestBody(String userFilePath) {
+        return new File(userFilePath);
+    }
+
+    public static ValidatableResponse PostUsersWithBody(String contentType, File testUser, String url, int statusCode) {
+        return given()
+                .contentType(contentType)
+                .body(testUser)
+                .when()
+                .post(url)
+                .then()
+                .statusCode(statusCode);
+    }
+
+    public static UnregisteredUser MapValidatableResponseToUnregisteredUser(ValidatableResponse response) {
+        return response.extract().as(UnregisteredUser.class);
+    }
+
+    public static void CheckValuesBetweenResponseAndReference(UnregisteredUser userResult, UnregisteredUser userReference) {
+        assert userResult.name.equals(userReference.name) : "User name doesn't match the reference";
+        assert userResult.job.equals(userReference.job) : "User job doesn't match the reference";
     }
 }
