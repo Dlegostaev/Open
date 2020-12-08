@@ -13,27 +13,27 @@ public class GoogleSearchResultForm {
         this.description = description;
     }
 
-    public String GetURL() {
+    public String getURL() {
         return url.getAttribute("href");
     }
 
-    public String GetTitle() {
+    public String getTitle() {
         return title.getText();
     }
 
-    public String GetDescription() {
+    public String getDescription() {
         return description.getText();
     }
 
-    public void ClickOnURL() {
+    public void clickOnURL() {
         url.click();
     }
 
-    public void ClickOnTitle() {
+    public void clickOnTitle() {
         title.click();
     }
 
-    public void ClickOnDescription() {
+    public void clickOnDescription() {
         description.click();
     }
 }

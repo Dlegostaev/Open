@@ -1,6 +1,8 @@
 package ru.open.api;
 
 import io.restassured.response.ValidatableResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import ru.open.api.models.RequestConfig;
@@ -13,15 +15,17 @@ import static ru.open.api.steps.Steps.*;
 public class GetTest {
     @Parameters("configPath")
     @Test
-    public void TestMethodGet(String configPath) throws TestException {
-        RequestConfig requestConfig = APIJson.GetConfigFromJson(configPath);
-        // 1) получить список пользователей
-        ValidatableResponse response = GetUsersAsResponse(requestConfig.getUrl(), requestConfig.getStatusCode());
+    public void testMethodGet(String configPath) throws TestException {
+        RequestConfig requestConfig = APIJson.getConfigFromJson(configPath);
+        Logger logger = LoggerFactory.getLogger("OpenApiLogger");
 
-        // 2) замапить на объект
-        UsersPostResponse usersPostResponse = MapValidatableResponseToUsersPostResponse(response);
+        logger.info("Get users list as response");
+        ValidatableResponse response = getUsersAsResponse(requestConfig.getUrl(), requestConfig.getStatusCode());
 
-        // 3) проверить, что все поля пришли (достаточно на notNull)
-        CheckAllValuesOfUsersPostResponse(usersPostResponse);
+        logger.info("Map response to java object");
+        UsersPostResponse usersPostResponse = mapValidatableResponseToUsersPostResponse(response);
+
+        logger.info("Check that all fields are not null");
+        checkAllValuesOfUsersPostResponse(usersPostResponse);
     }
 }

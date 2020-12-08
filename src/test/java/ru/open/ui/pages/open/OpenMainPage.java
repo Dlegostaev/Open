@@ -13,7 +13,7 @@ public class OpenMainPage implements WebPage {
 
     public OpenCurrenciesForm currenciesForm;
 
-    public OpenMainPage WaitUntilPageIsLoaded() {
+    public OpenMainPage waitUntilPageIsLoaded() {
         element(internetBankButtonLocator).shouldBe(visible);
         element(internetBankButtonLocator).shouldBe(enabled);
         return this;

@@ -5,6 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import ru.open.ui.models.WebsiteData;
 import ru.open.util.TestException;
 
@@ -13,28 +14,27 @@ import java.util.ArrayList;
 import static com.codeborne.selenide.Selenide.*;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static ru.open.ui.util.UIJson.GetWebsiteDataFromJson;
+import static ru.open.ui.util.UIJson.getWebsiteDataFromJson;
 
 public class OpenCurrenciesForm {
 
-    String formLocator = ".main-page-exchange"; //1st level
+    String formLocator = ".main-page-exchange";
 
-    //---------TABS MODE START------------
-    String tabLocator = " [role='tab']";   //2nd level
-    String tabPanelLocator = " [role='tabpanel'][tabindex='0']"; //2nd level
-    //---------TABS MODE END------------
+    String tabLocator = " [role='tab']";
+    String tabPanelLocator = " [role='tabpanel'][tabindex='0']";
 
-    String tabPanelRowLocator = " .main-page-exchange__row"; //3rd level (2nd in non-tabs mode)
-    String tabPanelRowCurrencyNameLocator = " .main-page-exchange__currency-name";  //4th level (3rd in non-tabs mode)
-    String tabPanelRowCurrencyRateLocator = " .main-page-exchange__rate";  //4th level (3rd in non-tabs mode)
+    String tabPanelRowLocator = " .main-page-exchange__row";
+    String tabPanelRowCurrencyNameLocator = " .main-page-exchange__currency-name";
+    String tabPanelRowCurrencyRateLocator = " .main-page-exchange__rate";
 
-    String tabPanelHeaderLocator = " .main-page-exchange__table-header";  //3th level (2nd in non-tabs mode)
-    String tabPanelHeaderTextLocator = " td > span:first-child";  //4th level (3rd in non-tabs mode)
+    String tabPanelHeaderLocator = " .main-page-exchange__table-header";
+    String tabPanelHeaderTextLocator = " td > span:first-child";
 
     String websiteDataPath = "src/test/java/ru/open/ui/data/websiteData.json";
-    WebsiteData websiteData = GetWebsiteDataFromJson(websiteDataPath);
+    WebsiteData websiteData = getWebsiteDataFromJson(websiteDataPath);
 
     int currentTabIndex = 0;    // tab active by default
+    boolean tabsModeInited = false;
     int tabSize;
 
     By tabsModeSelector = new By.ByCssSelector(".main-page-exchange .ant-tabs");
@@ -52,20 +52,27 @@ public class OpenCurrenciesForm {
     public OpenCurrenciesForm() throws TestException {
         form = element(formLocator).scrollTo().shouldBe(Condition.visible);
 
-        PreInit();
+        preInit();
     }
 
-    private void PreInit() {
+    private void preInit() {
         if (isTabsMode()) {
             tabs = form.$$(tabLocator);
             for (SelenideElement tab : tabs) {
                 tab.shouldBe(Condition.visible);
             }
             tabSize = tabs.size();
+            tabsModeInited = true;
 
-            InitFormTabs();
+            initFormTabs();
         } else {
-            InitFormMain();
+            initFormMain();
+        }
+    }
+
+    public void checkMode() {
+        if (tabsModeInited != isTabsMode()) {
+            preInit();
         }
     }
 
@@ -78,45 +85,50 @@ public class OpenCurrenciesForm {
         return true;
     }
 
-    private void InitFormMain() {
-        tabPanelHeader = form.$(tabPanelHeaderLocator).shouldBe(Condition.visible);
+    private void initFormMain() {
+        try {
+            tabPanelHeader = form.$(tabPanelHeaderLocator).shouldBe(Condition.visible);
 
-        // which column is for sale which is for buy
-        int buy = GetBuySellColumnNumberFromHeader(websiteData.getBuy()) - 1;    // -1 because we get number from 3 results
-        int sell = GetBuySellColumnNumberFromHeader(websiteData.getSell()) - 1;  // but converting into 2 results
+            // which column is for sale which is for buy
+            int buy = getBuySellColumnNumberFromHeader(websiteData.getBuy()) - 1;    // -1 because we get number from 3 results
+            int sell = getBuySellColumnNumberFromHeader(websiteData.getSell()) - 1;  // but converting into 2 results
 
-        tabPanelExchangeRow = form.$$(tabPanelRowLocator);
-        currencyRowList = new ArrayList<CurrencyRow>();
-        for (SelenideElement row : tabPanelExchangeRow) {
-            String currencyName = row.$(tabPanelRowCurrencyNameLocator).getText();
-            String currencyBuyRate = row.$$(tabPanelRowCurrencyRateLocator).get(buy).getText();  //TODO
-            String currencySellRate = row.$$(tabPanelRowCurrencyRateLocator).get(sell).getText(); //TODO
-            CurrencyRow currencyRow = new CurrencyRow(currencyName, currencyBuyRate, currencySellRate);
-            currencyRowList.add(currencyRow);
+            tabPanelExchangeRow = form.$$(tabPanelRowLocator);
+            currencyRowList = new ArrayList<>();
+            for (SelenideElement row : tabPanelExchangeRow) {
+                String currencyName = row.$(tabPanelRowCurrencyNameLocator).getText();
+                String currencyBuyRate = row.$$(tabPanelRowCurrencyRateLocator).get(buy).getText();
+                String currencySellRate = row.$$(tabPanelRowCurrencyRateLocator).get(sell).getText();
+                CurrencyRow currencyRow = new CurrencyRow(currencyName, currencyBuyRate, currencySellRate);
+                currencyRowList.add(currencyRow);
+            }
+        } catch (StaleElementReferenceException e) {
+            preInit();
         }
     }
 
-    private void InitFormTabs() {
+    private void initFormTabs() {
         tabPanel = form.$(tabPanelLocator).shouldBe(Condition.visible);
 
         tabPanelHeader = tabPanel.$(tabPanelHeaderLocator).shouldBe(Condition.visible);
 
         // which column is for sale which is for buy
-        int buy = GetBuySellColumnNumberFromHeader(websiteData.getBuy()) - 1;    // -1 because we get number from 3 results
-        int sell = GetBuySellColumnNumberFromHeader(websiteData.getSell()) - 1;  // but converting into 2 results
+        int buy = getBuySellColumnNumberFromHeader(websiteData.getBuy()) - 1;    // -1 because we get number from 3 results
+        int sell = getBuySellColumnNumberFromHeader(websiteData.getSell()) - 1;  // but converting into 2 results
 
         tabPanelExchangeRow = tabPanel.$$(tabPanelRowLocator);
-        currencyRowList = new ArrayList<CurrencyRow>();
+        currencyRowList = new ArrayList<>();
         for (SelenideElement row : tabPanelExchangeRow) {
             String currencyName = row.$(tabPanelRowCurrencyNameLocator).getText();
-            String currencyBuyRate = row.$$(tabPanelRowCurrencyRateLocator).get(buy).getText();  //TODO
-            String currencySellRate = row.$$(tabPanelRowCurrencyRateLocator).get(sell).getText(); //TODO
+            String currencyBuyRate = row.$$(tabPanelRowCurrencyRateLocator).get(buy).getText();
+            String currencySellRate = row.$$(tabPanelRowCurrencyRateLocator).get(sell).getText();
             CurrencyRow currencyRow = new CurrencyRow(currencyName, currencyBuyRate, currencySellRate);
             currencyRowList.add(currencyRow);
         }
     }
 
-    public int GetBuySellColumnNumberFromHeader(String headerString) {
+    public int getBuySellColumnNumberFromHeader(String headerString) {
+        checkMode();
         tabPanelHeaderExchange = tabPanelHeader.$$(tabPanelHeaderTextLocator);
         for (int i = 0; i < tabPanelHeaderExchange.size(); i++) {
             if (tabPanelHeaderExchange.get(i).getText().contains(headerString)) {
@@ -126,7 +138,8 @@ public class OpenCurrenciesForm {
         return -1;
     }
 
-    public String GetCurrencyRateBankBuy(String currency) throws TestException {
+    public String getCurrencyRateBankBuy(String currency) throws TestException {
+        checkMode();
         for (CurrencyRow currencyRow : currencyRowList) {
             if (currencyRow.currencyName.equals(currency)) {
                 return currencyRow.buyRate;
@@ -135,11 +148,13 @@ public class OpenCurrenciesForm {
         throw new TestException("Try to get non-exist buy rate currency");
     }
 
-    public float GetCurrencyRateBankBuyAsFloat(String currency) throws TestException {
-        return Float.parseFloat(GetCurrencyRateBankBuy(currency).replace(",", "."));
+    public float getCurrencyRateBankBuyAsFloat(String currency) throws TestException {
+        checkMode();
+        return Float.parseFloat(getCurrencyRateBankBuy(currency).replace(",", "."));
     }
 
-    public String GetCurrencyRateBankSell(String currency) throws TestException {
+    public String getCurrencyRateBankSell(String currency) throws TestException {
+        checkMode();
         for (CurrencyRow currencyRow : currencyRowList) {
             if (currencyRow.currencyName.equals(currency)) {
                 return currencyRow.sellRate;
@@ -148,17 +163,18 @@ public class OpenCurrenciesForm {
         throw new TestException("Try to get non-exist sell rate currency");
     }
 
-    public float GetCurrencyRateBankSellAsFloat(String currency) throws TestException {
-        return Float.parseFloat(GetCurrencyRateBankSell(currency).replace(",", "."));
+    public float getCurrencyRateBankSellAsFloat(String currency) throws TestException {
+        checkMode();
+        return Float.parseFloat(getCurrencyRateBankSell(currency).replace(",", "."));
     }
 
-    public void SwitchTab(int tabNumber) throws TestException {
-        PreInit();
+    public void switchTab(int tabNumber) throws TestException {
+        preInit();
         if (tabNumber > tabSize) {
             throw new TestException("Trying switch to tab which doesn't exist");
         }
         tabs.get(tabNumber).click();
         currentTabIndex = tabNumber;
-        InitFormTabs();
+        initFormTabs();
     }
 }

@@ -25,7 +25,6 @@
     </test>
 
     <test name="UI">
-        <parameter name="configPath" value="src/test/java/ru/open/ui/data/browserConfig.json"/>
         <parameter name="dataPath" value="src/test/java/ru/open/ui/data/testData.json"/>
         <classes>
             <class name="ru.open.ui.UITest"/>

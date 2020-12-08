@@ -9,20 +9,20 @@ import java.util.ArrayList;
 
 import static com.codeborne.selenide.Selenide.elements;
 
-public class GoogleResultPage implements WebPage{
+public class GoogleResultPage implements WebPage {
     String searchLocator = "#search .g";    // only non-ads results are supported
     String urlLocator = ".yuRUbf > a";
     String titleLocator = "a > h3 > span";
     String descriptionLocator = ".aCOpRe> span";
 
-    ArrayList<GoogleSearchResultForm> resultsCollection = new ArrayList<GoogleSearchResultForm>();
+    ArrayList<GoogleSearchResultForm> resultsCollection = new ArrayList<>();
     GoogleSearchResultForm selectedResult = null;
 
     public GoogleResultPage() {
-        this.InitSearchForms();
+        this.initSearchForms();
     }
 
-    public void InitSearchForms() {
+    public void initSearchForms() {
         ElementsCollection buttons = elements(searchLocator);
 
         for (SelenideElement button : buttons) {
@@ -33,62 +33,62 @@ public class GoogleResultPage implements WebPage{
         }
     }
 
-    public int NumberOfSearchWithURLEquals(String url) {
+    public int numberOfSearchWithURLEquals(String url) {
         for (int i = 0; i < resultsCollection.size(); i++) {
-            if (resultsCollection.get(i).GetURL().equals(url)) {
+            if (resultsCollection.get(i).getURL().equals(url)) {
                 return i;
             }
         }
         return -1;
     }
 
-    public int NumberOfSearchWithURLContains(String url) {
+    public int numberOfSearchWithURLContains(String url) {
         for (int i = 0; i < resultsCollection.size(); i++) {
-            if (resultsCollection.get(i).GetURL().contains(url)) {
+            if (resultsCollection.get(i).getURL().contains(url)) {
                 return i;
             }
         }
         return -1;
     }
 
-    public boolean IfUrlEquals(String url) {
+    public boolean ifUrlEquals(String url) {
         for (GoogleSearchResultForm resultForm : resultsCollection) {
-            if (resultForm.GetURL().equals(url)) {
+            if (resultForm.getURL().equals(url)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean IfUrlContains(String url) {
+    public boolean ifUrlContains(String url) {
         for (GoogleSearchResultForm resultForm : resultsCollection) {
-            if (resultForm.GetURL().contains(url)) {
+            if (resultForm.getURL().contains(url)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean IfExactTitlePresent(String title) {
+    public boolean ifExactTitlePresent(String title) {
         for (GoogleSearchResultForm resultForm : resultsCollection) {
-            if (resultForm.GetTitle().equals(title)) {
+            if (resultForm.getTitle().equals(title)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean IfExactDescriptionPresent(String description) {
+    public boolean ifExactDescriptionPresent(String description) {
         for (GoogleSearchResultForm resultForm : resultsCollection) {
-            if (resultForm.GetDescription().equals(description)) {
+            if (resultForm.getDescription().equals(description)) {
                 return true;
             }
         }
         return false;
     }
 
-    public GoogleResultPage SelectResultWithUrl(String url) throws TestException {
-        int resultNumber = NumberOfSearchWithURLContains(url);
+    public GoogleResultPage selectResultWithUrl(String url) throws TestException {
+        int resultNumber = numberOfSearchWithURLContains(url);
         if (resultNumber == -1) {
             throw new TestException("Can't select result with URL, because it doesn't present in results. URL: " + url);
         } else {
@@ -97,11 +97,11 @@ public class GoogleResultPage implements WebPage{
         }
     }
 
-    public GoogleResultPage OpenSelectedResult() throws TestException {
+    public GoogleResultPage openSelectedResult() throws TestException {
         if (selectedResult == null) {
             throw new TestException("Try to open result, where none of them selected");
         } else {
-            selectedResult.ClickOnURL();
+            selectedResult.clickOnURL();
             return this;
         }
     }

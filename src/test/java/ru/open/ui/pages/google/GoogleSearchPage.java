@@ -10,23 +10,23 @@ public class GoogleSearchPage implements WebPage {
     String searchFieldLocator = "[name=q]";
     String searchButtonLocator = "[name=btnK]";
 
-    public GoogleSearchPage WaitUntilPageIsLoaded() {
+    public GoogleSearchPage waitUntilPageIsLoaded() {
         element(uniqueImageLocator).shouldBe(visible);
         element(uniqueImageLocator).shouldBe(enabled);
         return this;
     }
 
-    public GoogleSearchPage InputText(String text) {
+    public GoogleSearchPage inputText(String text) {
         element(searchFieldLocator).sendKeys(text);
         return this;
     }
 
-    public GoogleSearchPage SumbitSearch() {
+    public GoogleSearchPage sumbitSearch() {
         element(searchFieldLocator).submit();
         return this;
     }
 
-    public GoogleSearchPage ClickSearchButton() {
+    public GoogleSearchPage clickSearchButton() {
         element(searchButtonLocator).click();
         return this;
     }

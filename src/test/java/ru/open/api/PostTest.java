@@ -1,6 +1,8 @@
 package ru.open.api;
 
 import io.restassured.response.ValidatableResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import ru.open.api.models.RequestConfig;
@@ -10,27 +12,28 @@ import ru.open.util.TestException;
 import java.io.File;
 
 import static ru.open.api.steps.Steps.*;
-import static ru.open.api.util.APIJson.GetConfigFromJson;
-import static ru.open.api.util.APIJson.GetUserFromJson;
+import static ru.open.api.util.APIJson.getConfigFromJson;
+import static ru.open.api.util.APIJson.getUserFromJson;
 
 public class PostTest {
     @Parameters({"configPath", "userFilePath"})
     @Test
-    public void TestMethodPost(String configPath, String userFilePath) throws TestException {
-        RequestConfig requestConfig = GetConfigFromJson(configPath);
-        UnregisteredUser userReference = GetUserFromJson(userFilePath);
+    public void testMethodPost(String configPath, String userFilePath) throws TestException {
+        RequestConfig requestConfig = getConfigFromJson(configPath);
+        UnregisteredUser userReference = getUserFromJson(userFilePath);
+        Logger logger = LoggerFactory.getLogger("OpenApiLogger");
 
-        // 1) подготовить тело запроса
-        File testUser = PrepareRequestBody(userFilePath);
+        logger.info("Prepare body of request");
+        File testUser = prepareRequestBody(userFilePath);
 
-        // 2) отправить запрос с телом
-        ValidatableResponse response = PostUsersWithBody(requestConfig.getContentType(), testUser,
+        logger.info("Send request with prepared body");
+        ValidatableResponse response = postUsersWithBody(requestConfig.getContentType(), testUser,
                 requestConfig.getUrl(), requestConfig.getStatusCode());
 
-        // 3) замапить ответ на объект
-        UnregisteredUser userResult = MapValidatableResponseToUnregisteredUser(response);
+        logger.info("Map response to java object");
+        UnregisteredUser userResult = mapValidatableResponseToUnregisteredUser(response);
 
-        // 4) проверить, что в ответе те же самые значения из запроса
-        CheckValuesBetweenResponseAndReference(userResult, userReference);
+        logger.info("Check that response user fields match reference user fields");
+        checkValuesBetweenResponseAndReference(userResult, userReference);
     }
 }

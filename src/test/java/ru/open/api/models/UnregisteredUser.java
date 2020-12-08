@@ -8,17 +8,17 @@ import lombok.Setter;
 public class UnregisteredUser {
     @Getter
     @Setter
-    public String name;
+    String name;
 
     @Getter
     @Setter
-    public String job;
+    String job;
 
     @Getter
     @Setter
-    public int id;
+    int id;
 
     @Getter
     @Setter
-    public String createdAt;
+    String createdAt;
 }
