@@ -42,7 +42,7 @@ public class Steps {
     }
 
     public static GoogleResultPage checkSearchResultContainsUrl(GoogleResultPage googleResultPage, String url) {
-        Assert.assertTrue(googleResultPage.ifUrlContains(url), "URL of goal page is not present in results. URL: " + url);
+        Assert.assertTrue(googleResultPage.ifUrlResultsContains(url), "URL of goal page is not present in results. URL: " + url);
         return googleResultPage;
     }
 

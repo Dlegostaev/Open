@@ -4,7 +4,6 @@ import ru.open.ui.forms.OpenCurrenciesForm;
 import ru.open.ui.pages.google.WebPage;
 import ru.open.util.TestException;
 
-import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.element;
 
@@ -15,7 +14,6 @@ public class OpenMainPage implements WebPage {
 
     public OpenMainPage waitUntilPageIsLoaded() {
         element(internetBankButtonLocator).shouldBe(visible);
-        element(internetBankButtonLocator).shouldBe(enabled);
         return this;
     }
 

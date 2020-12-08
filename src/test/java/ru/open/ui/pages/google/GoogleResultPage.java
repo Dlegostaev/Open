@@ -22,7 +22,7 @@ public class GoogleResultPage implements WebPage {
         this.initSearchForms();
     }
 
-    public void initSearchForms() {
+    public GoogleResultPage initSearchForms() {
         ElementsCollection buttons = elements(searchLocator);
 
         for (SelenideElement button : buttons) {
@@ -31,6 +31,7 @@ public class GoogleResultPage implements WebPage {
                     button.find(descriptionLocator));
             resultsCollection.add(searchResult);
         }
+        return this;
     }
 
     public int numberOfSearchWithURLEquals(String url) {
@@ -51,7 +52,7 @@ public class GoogleResultPage implements WebPage {
         return -1;
     }
 
-    public boolean ifUrlEquals(String url) {
+    public boolean ifUrlResultsEquals(String url) {
         for (GoogleSearchResultForm resultForm : resultsCollection) {
             if (resultForm.getURL().equals(url)) {
                 return true;
@@ -60,7 +61,7 @@ public class GoogleResultPage implements WebPage {
         return false;
     }
 
-    public boolean ifUrlContains(String url) {
+    public boolean ifUrlResultsContains(String url) {
         for (GoogleSearchResultForm resultForm : resultsCollection) {
             if (resultForm.getURL().contains(url)) {
                 return true;
@@ -69,7 +70,7 @@ public class GoogleResultPage implements WebPage {
         return false;
     }
 
-    public boolean ifExactTitlePresent(String title) {
+    public boolean ifTitleResultsEquals(String title) {
         for (GoogleSearchResultForm resultForm : resultsCollection) {
             if (resultForm.getTitle().equals(title)) {
                 return true;
@@ -78,7 +79,7 @@ public class GoogleResultPage implements WebPage {
         return false;
     }
 
-    public boolean ifExactDescriptionPresent(String description) {
+    public boolean ifDescriptionResultsEquals(String description) {
         for (GoogleSearchResultForm resultForm : resultsCollection) {
             if (resultForm.getDescription().equals(description)) {
                 return true;
