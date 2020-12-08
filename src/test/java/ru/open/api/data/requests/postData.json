@@ -1,6 +1,5 @@
 {
   "url": "https://reqres.in/api/users",
-  "userFilePath": "src/test/java/ru/open/api/data/users/testUser.json",
   "contentType": "application/json",
   "statusCode": 201
 }
