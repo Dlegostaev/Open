@@ -1,0 +1,33 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="OpenTestSuite" verbose="1">
+    <test name="APIGet">
+        <parameter name="configPath" value="src/test/java/ru/open/api/data/requests/getData.json"/>
+        <classes>
+            <class name="ru.open.api.GetTest"/>
+        </classes>
+    </test>
+
+    <test name="APIPost1">
+        <parameter name="configPath" value="src/test/java/ru/open/api/data/requests/postData.json"/>
+        <parameter name="userFilePath" value="src/test/java/ru/open/api/data/users/testUser.json"/>
+        <classes>
+            <class name="ru.open.api.PostTest"/>
+        </classes>
+    </test>
+
+    <test name="APIPost2">
+        <parameter name="configPath" value="src/test/java/ru/open/api/data/requests/postData.json"/>
+        <parameter name="userFilePath" value="src/test/java/ru/open/api/data/users/testUser2.json"/>
+        <classes>
+            <class name="ru.open.api.PostTest"/>
+        </classes>
+    </test>
+
+    <test name="UI">
+        <parameter name="dataPath" value="src/test/java/ru/open/ui/data/testData.json"/>
+        <classes>
+            <class name="ru.open.ui.UITest"/>
+        </classes>
+    </test>
+</suite>
